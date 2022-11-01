@@ -3,10 +3,20 @@ package javaSwing;
 import java.awt.*;
 
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 import javax.swing.*;
 
 
 public class Login extends JFrame implements ActionListener {
+	
+	private static JButton login;
+	private static JTextField email ;
+	private static JPasswordField password ;
 	
 	Login(){
 		super();
@@ -52,7 +62,7 @@ public class Login extends JFrame implements ActionListener {
 		welcome2.setFont(new Font("Tahoma", Font.BOLD, 20));
 		panel.add(welcome2);
 		
-		JTextField email = new JTextField("Email");
+		email = new JTextField();
 		email.setBorder(null);
 		 
 		email.setEnabled(true);
@@ -60,7 +70,7 @@ public class Login extends JFrame implements ActionListener {
 		
 		email.setBounds(500, 300, 327,48);
 		
-		JTextField password= new JTextField("Password");
+		password= new JPasswordField();
 		password.setBorder(null);
 		password.setBounds(500, 360, 327,48);
 		password.setEnabled(true);
@@ -71,13 +81,15 @@ public class Login extends JFrame implements ActionListener {
 		 
 		 
 		
-		JButton login = new JButton("Login");
+		login = new JButton("Login");
 		login.setBorder(null);
 		login.setBounds(500, 430, 327, 48);
 		login.setForeground(Color.WHITE);
 		login.setBackground(Color.GREEN);
 		login.setFont(new Font("Tahoma", Font.BOLD, 17));
+		login.addActionListener(this);
 		panel.add(login);
+
 		
 		JPanel message = new JPanel();
 		message.setBackground(new Color(0x383838));
@@ -126,7 +138,68 @@ public class Login extends JFrame implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		if(e.getSource()==login) {
+			loginFunction();
+			System.out.println("2");
+		}
+	}
+	
+	private void loginFunction() {
+        String emailStr = email.getText();
+        String passwordStr = String.valueOf(password.getPassword());
+     
+        
+        if (emailStr.isEmpty() || passwordStr.isEmpty() ) {
+            JOptionPane.showMessageDialog(this,
+                    "Please enter all fields",
+                    "Try again",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        checkLogin(emailStr,passwordStr);
+
+      
+	}
+	
+	private void checkLogin( String email, String password) {
+        
+        final String DB_URL = "jdbc:mysql://localhost/ihm";
+        final String USERNAME = "root";
+        final String PASSWORD = "";
+        
+        
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+            // Connected to database successfully...
+
+            Statement stmt = conn.createStatement();
+            
+            String query = "select * from user where email = '" + email + "'  and password ='" + password + "' ";//Storing MySQL query in A string variable
+            ResultSet resultSet = stmt.executeQuery(query);//executing query and storing result in ResultSet
+            
+            if(resultSet.next() == false) {
+            	JOptionPane.showMessageDialog(this,
+                        "account doesnt exist",
+                        "Try again",
+                        JOptionPane.ERROR_MESSAGE);
+               
+            }
+            else {
+            	JOptionPane.showMessageDialog(this,
+                        "account exist",
+                        "Try again",
+                        JOptionPane.ERROR_MESSAGE);
+                
+            }
+            
+            stmt.close();
+            conn.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+     
 	}
 
 }
