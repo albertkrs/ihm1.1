@@ -3,10 +3,18 @@ package javaSwing;
 import java.awt.*;
 
 import java.awt.event.*;
+
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 
 public class Home extends JFrame implements ActionListener{
+	public static Clip clip;
+	public static JPanel audioControl;
+	public static JPanel rightPanel;
+	public static AudioController audioControll;
+	public static boolean isPlaying=false;
+	public static boolean isControllExist=false;
 	Home(){
 		super();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -15,7 +23,7 @@ public class Home extends JFrame implements ActionListener{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 		this.setLayout(null);
 		
-		JPanel rightPanel = new JPanel();
+		rightPanel = new JPanel();
 		rightPanel.setBackground(new Color(0x383838));
 		rightPanel.setBounds(75, 0, 1600, 1800);
 		this.getContentPane().add(rightPanel,BorderLayout.WEST);
@@ -41,7 +49,7 @@ public class Home extends JFrame implements ActionListener{
 		
 		JPanel logOutBox = new JPanel();
 		logOutBox.setBackground(new Color(0x656565));
-		logOutBox.setBounds(0, 700, 75, 75);
+		logOutBox.setBounds(0, 500, 75, 75);
 		leftPanel.add(logOutBox);
 		
 		JPanel popular = new JPanel();
@@ -72,11 +80,10 @@ public class Home extends JFrame implements ActionListener{
 		JPanel card1 = new JPanel();
 		card1.setBackground(new Color(0x595959));
 		card1.setPreferredSize(new Dimension(150, 250));
-		popularCardContainer.add(card1);
 		
-		popularCardContainer.add(new PodcastBox());
-		popularCardContainer.add(new PodcastBox());
-		
+		popularCardContainer.add(new PodcastBox(0,"D:\\Users\\Desktop\\ihm\\src\\audio\\amv.wav","amv","17:05",""));
+		popularCardContainer.add(new PodcastBox(1,"D:\\Users\\Desktop\\ihm\\src\\audio\\bones.wav","bones","17:05",""));
+		popularCardContainer.add(new PodcastBox(2,"D:\\Users\\Desktop\\ihm\\src\\audio\\clouds.wav","clouds","14:05",""));
 		
 		
 		JPanel latest = new JPanel();
@@ -99,15 +106,16 @@ public class Home extends JFrame implements ActionListener{
 		latest.add(seeAll2);
 		
 		JPanel latestCardContainer = new JPanel();
-		latestCardContainer.setBounds(80,430,1400,600);
+		latestCardContainer.setBounds(80,430,1400,275);
 		latestCardContainer.setBackground(new Color(0x383838));
 		latestCardContainer.setLayout(new FlowLayout(FlowLayout.LEADING));
 		rightPanel.add(latestCardContainer);
 		
 
 		
-		latestCardContainer.add(new PodcastBox());
-		latestCardContainer.add(new PodcastBox());
+		latestCardContainer.add(new PodcastBox(0,"D:\\\\Users\\\\Desktop\\\\ihm\\\\src\\\\audio\\\\bones.wav","title","17:05",""));
+		latestCardContainer.add(new PodcastBox(1,"D:\\\\Users\\\\Desktop\\\\ihm\\\\src\\\\audio\\\\bones.wav","title2","17:222",""));
+		
 		
 		
 		
@@ -117,6 +125,12 @@ public class Home extends JFrame implements ActionListener{
 		
 		this.setVisible(true);
 	}
+	public static void addControll(JPanel controll) {
+		rightPanel.add(controll);
+		rightPanel.repaint();
+	}
+	
+	
 	public static void main(String[] args) {
 
 		new Home();

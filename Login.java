@@ -186,11 +186,10 @@ public class Login extends JFrame implements ActionListener {
                
             }
             else {
-            	JOptionPane.showMessageDialog(this,
-                        "account exist",
-                        "Try again",
-                        JOptionPane.ERROR_MESSAGE);
-                
+            	
+            	Home home = new Home();
+				home.show();
+				dispose();
             }
             
             stmt.close();
